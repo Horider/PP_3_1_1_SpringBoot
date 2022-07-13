@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<table border="1" , align="center">
+    <div th:each="user : ${users}">
+        <tr>
+            <td>
+                <a th:href="@{/users/{id}(id=${user.getId()})}"
+                   th:text="${user.getName() + ', ' + user.getAge()}">user</a>
+            </td>
+        </tr>
+    </div>
+    <tr>
+        <td>
+            <a href="/users/new">Create new user</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
