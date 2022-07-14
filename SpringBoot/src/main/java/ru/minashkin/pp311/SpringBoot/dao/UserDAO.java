@@ -1,5 +1,6 @@
 package ru.minashkin.pp311.SpringBoot.dao;
 
+
 import ru.minashkin.pp311.SpringBoot.models.User;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface UserDAO {
 
     void save(User user);
 
-    void update(int id, User userUpdate);
+    void update(User userUpdate);
 
     void delete(int id);
 }

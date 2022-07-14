@@ -1,19 +1,18 @@
 package ru.minashkin.pp311.SpringBoot.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.minashkin.pp311.SpringBoot.models.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
 
+    @PersistenceContext
     private final EntityManager entityManager;
 
-    @Autowired
     public UserDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -21,9 +20,7 @@ public class UserDAOImpl implements UserDAO{
     @Override
     @SuppressWarnings("unchecked")
     public List<User> findAll() {
-        String command = "FROM User";
-        Query query = entityManager.createQuery(command);
-        return query.getResultList();
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
     @Override
@@ -34,20 +31,23 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public void save(User user) {
         entityManager.persist(user);
+        entityManager.flush();
     }
 
     @Override
-    public void update(int id, User userUpdate) {
-        User newUser = findOne(id);
-        newUser.setName(userUpdate.getName());
-        entityManager.merge(newUser);
+    public void update(User userUpdate) {
+        entityManager.merge(userUpdate);
+        entityManager.flush();
     }
 
     @Override
     public void delete(int id) {
         User user = entityManager.find(User.class, id);
-        if (user != null) {
+        if (null == user) {
+            throw new NullPointerException("User not found");
+        } else {
             entityManager.remove(user);
         }
+        entityManager.flush();
     }
 }
